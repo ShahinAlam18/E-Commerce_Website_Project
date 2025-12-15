@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search - {{ query }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Page Heading -->
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Search results for "{{ query }}"</h1>
+
+  <!-- Products Grid -->
+  {% if products %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for p in products %}
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+      
+      <!-- Product Image -->
+      <a href="{% url 'products:product_detail' p.slug %}">
+        <img class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105" 
+             src="{% if p.image %}{{ p.image.url }}{% elif p.slug == 'kids-shoe' %}{% static 'kids_shoe.png' %}{% elif p.slug == 'kids-hat' %}{% static 'kids_hat.png' %}{% elif p.slug == 'kids-jacket' %}{% static 'kids_jacket.png' %}{% elif p.slug == 'kids-tshirt' %}{% static 'kids_tshirt.png' %}{% elif p.slug == 'kids-backpack' %}{% static 'kids_backpack.png' %}{% elif p.slug == 'mens-shirt' %}{% static 'menshirt.png' %}{% elif p.slug == 'mens-hoodie' %}{% static 'menshoodie.png' %}{% elif p.slug == 'mensneaker' %}{% static 'mensneaker.jpg' %}{% elif p.slug == 'mens-pant' %}{% static 'menspant.jpg' %}{% elif p.slug == 'mens-watch' %}{% static 'menwatch.png' %}{% elif p.slug == 'womens-dress' %}{% static 'womens_dress.png' %}{% else %}{% static 'placeholder.png' %}{% endif %}" 
+             alt="{{ p.name }}">
+      </a>
+
+      <!-- Product Info -->
+      <div class="p-4 flex flex-col flex-1">
+        <h3 class="font-semibold truncate text-gray-900">{{ p.name }}</h3>
+        <p class="text-gray-700 mt-1 mb-2">${{ p.price }}</p>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-1 text-xs text-gray-500 mb-3">
+          {% for t in p.tags.all %}
+            <span class="px-2 py-0.5 bg-gray-100 rounded">#{{ t.name }}</span>
+          {% empty %}
+            <span class="text-gray-400">No tags</span>
+          {% endfor %}
+        </div>
+
+        <!-- Add to Cart Button -->
+        <a href="{% url 'products:add_to_cart' p.slug %}" 
+           class="add-to-cart-btn mt-auto bg-black hover:bg-gray-800 text-white text-center px-4 py-2 rounded-md font-medium transition-colors duration-200">
+          Add to Cart
+        </a>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p class="text-gray-500 text-center mt-6">No products found.</p>
+  {% endif %}
+
+</div>
+{% endblock %}
