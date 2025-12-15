@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load currency_filters %}
+{% block title %}{{ product.name }} - ShopX{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Breadcrumb -->
+  <nav class="text-sm text-gray-500 mb-6 flex flex-wrap gap-1">
+    <a href="/" class="hover:underline text-gray-700">Home</a> 
+    <span>/</span>
+    <a href="/products/category/{{ product.category.slug }}/" class="hover:underline text-gray-700">{{ product.category.name }}</a> 
+    <span>/</span>
+    <span class="text-gray-500">{{ product.name }}</span>
+  </nav>
+
+  <!-- Product Info -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-lg shadow-lg overflow-hidden">
+    
+    <!-- Product Image -->
+    <div class="w-full h-96 md:h-auto">
+      <img class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src="{{ product.image_url }}" alt="{{ product.name }}">
+    </div>
+
+    <!-- Product Details -->
+    <div class="p-6 flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h1>
+        <p class="text-2xl text-gray-800 mb-4">{{ product.price|currency }}</p>
+        <p class="text-gray-700 mb-6">{{ product.description }}</p>
+      </div>
+      <a href="{% url 'products:add_to_cart' product.slug %}?next={{ request.path }}" 
+         class="add-to-cart-btn mt-auto bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-white px-6 py-2 rounded-md text-lg font-semibold shadow inline-block text-center transition-colors duration-200">
+        Add to Cart
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

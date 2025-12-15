@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load currency_filters %}
+{% block title %}Home - ShopX{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-16">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-4 md:px-8 gap-8">
+    <div class="flex-1 text-center md:text-left">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Discover fashion for everyone</h1>
+      <p class="text-lg md:text-xl mb-6">
+        Shop collections for children, men, and women. Quality products at great prices.
+      </p>
+      
+    </div>
+    <div id="hero-tiles" class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4">
+      <a href="{% url 'products:category_list' 'children' %}" class="block rounded-xl overflow-hidden">
+        <img class="w-full h-32 object-cover transition-all duration-1000 ease-in-out opacity-100" src="{% static 'kids_shoe.png' %}" alt="Children">
+      </a>
+      <a href="{% url 'products:category_list' 'men' %}" class="block rounded-xl overflow-hidden">
+        <img class="w-full h-32 object-cover transition-all duration-1000 ease-in-out opacity-100" src="{% static 'menshirt.png' %}" alt="Men">
+      </a>
+      <a href="{% url 'products:category_list' 'women' %}" class="hidden md:block rounded-xl overflow-hidden">
+        <img class="w-full h-32 object-cover transition-all duration-1000 ease-in-out opacity-100" src="{% static 'womens_dress.png' %}" alt="Women">
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Children Section -->
+<section class="py-12 max-w-7xl mx-auto px-4 md:px-8">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Children</h2>
+    <a href="{% url 'products:category_list' 'children' %}" class="inline-flex items-center px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-md shadow-sm transition-all duration-200 hover:shadow-md hover:text-blue-600 group">
+      View all
+      <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    {% for p in children_products %}
+   <div class="group bg-white shadow rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition">
+      <a href="{% url 'products:product_detail' p.slug %}">
+        <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" src="{% if p.image %}{{p.image.url}}{% elif p.slug == 'kids-shoe' %}{% static 'kids_shoe.png' %}{% elif p.slug == 'kids-hat' %}{% static 'kids_hat.png' %}{% elif p.slug == 'kids-jacket' %}{% static 'kids_jacket.png' %}{% elif p.slug == 'kids-tshirt' %}{% static 'kids_tshirt.png' %}{% elif p.slug == 'kids-backpack' %}{% static 'kids_backpack.png' %}{% else %}{% static 'placeholder.png' %}{% endif %}" alt="{{ p.name }}">
+      </a>
+      <div class="p-4">
+     
+        <h3 class="font-semibold truncate">{{ p.name }}</h3>
+        <p class="text-gray-600">	 $ {{ p.price }}</p>
+        <a href="{% url 'products:add_to_cart' p.slug %}?next={{ request.path }}" class="add-to-cart-btn mt-3 inline-block bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-colors duration-200">Add to Cart</a>
+      </div>
+    </div>
+
+
+
+    {% empty %}
+      <p>No products yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Men Section -->
+<section class="py-12 max-w-7xl mx-auto px-4 md:px-8">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Men</h2>
+    <a href="{% url 'products:category_list' 'men' %}" class="inline-flex items-center px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-md shadow-sm transition-all duration-200 hover:shadow-md hover:text-blue-600 group">
+      View all
+      <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    {% for p in men_products %}
+    <div class="group bg-white shadow rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition">
+      <a href="{% url 'products:product_detail' p.slug %}">
+        <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" src="{% if p.image %}{{ p.image.url }}{% elif p.slug == 'mens-shirt' %}{% static 'menshirt.png' %}{% elif p.slug == 'mens-hoodie' %}{% static 'menshoodie.png' %}{% elif p.slug == 'mens-sneaker' %}{% static 'mensneaker.jpg' %}{% elif p.slug == 'mens-pant' %}{% static 'menspant.jpg' %}{% elif p.slug == 'mens-watch' %}{% static 'menwatch.png' %}{% else %}{% static 'placeholder.png' %}{% endif %}" alt="{{ p.name }}">
+      </a>
+      <div class="p-4">
+        <h3 class="font-semibold truncate">{{ p.name }}</h3>
+        <p class="text-gray-600">	 $ {{ p.price }}</p>
+        <a href="{% url 'products:add_to_cart' p.slug %}?next={{ request.path }}" class="add-to-cart-btn mt-3 inline-block bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-colors duration-200">Add to Cart</a>
+      </div>
+    </div>
+    {% empty %}
+      <p>No products yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Women Section -->
+<section class="py-12 max-w-7xl mx-auto px-4 md:px-8">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Women</h2>
+    <a href="{% url 'products:category_list' 'women' %}" class="inline-flex items-center px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-md shadow-sm transition-all duration-200 hover:shadow-md hover:text-blue-600 group">
+      View all
+      <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    {% for p in women_products %}
+    <div class="group bg-white shadow rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition">
+      <a href="{% url 'products:product_detail' p.slug %}">
+        <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" src="{% if p.image %}{{ p.image.url }}{% elif p.slug == 'womens-dress' %}{% static 'womens_dress.png' %}{% else %}{% static 'placeholder.png' %}{% endif %}" alt="{{ p.name }}">
+      </a>
+      <div class="p-4">
+        <h3 class="font-semibold truncate">{{ p.name }}</h3>
+        <p class="text-gray-600">	 $ {{ p.price }}</p>
+        <a href="{% url 'products:add_to_cart' p.slug %}?next={{ request.path }}" class="add-to-cart-btn mt-3 inline-block bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-colors duration-200">Add to Cart</a>
+      </div>
+    </div>
+    {% empty %}
+      <p>No products yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

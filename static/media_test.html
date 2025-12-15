@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Test - ShopX</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .image-test { display: flex; gap: 20px; flex-wrap: wrap; }
+        .image-test img { width: 200px; height: 200px; object-fit: cover; border: 2px solid #ccc; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Media Files Test</h1>
+    
+    <div class="test-section">
+        <h2>Static Images Test</h2>
+        <div class="image-test">
+            <div>
+                <img src="/static/kids_shoe.png" alt="Kids Shoe" onerror="this.style.border='2px solid red'">
+                <p>Kids Shoe (Static)</p>
+            </div>
+            <div>
+                <img src="/static/menshirt.png" alt="Men's Shirt" onerror="this.style.border='2px solid red'">
+                <p>Men's Shirt (Static)</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Media Images Test</h2>
+        <div class="image-test">
+            <div>
+                <img src="/media/products/menspant.jpg" alt="Men's Pant" onerror="this.style.border='2px solid red'">
+                <p>Men's Pant (Media)</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Instructions</h2>
+        <div class="info">
+            <h3>To test this page:</h3>
+            <ol>
+                <li>Start your Django server: <code>python manage.py runserver</code></li>
+                <li>Open this page: <code>http://localhost:8000/static/media_test.html</code></li>
+                <li>Check if all images load correctly</li>
+                <li>Red borders indicate failed image loads</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Expected Results</h2>
+        <div class="success">
+            <strong>✓ Working:</strong> Images should load without red borders
+        </div>
+        <div class="error">
+            <strong>✗ Not Working:</strong> Images with red borders indicate URL issues
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Troubleshooting</h2>
+        <div class="info">
+            <h3>If media images don't load:</h3>
+            <ul>
+                <li>Check that <code>MEDIA_URL</code> and <code>MEDIA_ROOT</code> are set in settings.py</li>
+                <li>Verify that media serving is configured in urls.py</li>
+                <li>Ensure the media directory exists and contains images</li>
+                <li>Check that Django is running in DEBUG mode</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Add error handling for images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.border = '2px solid red';
+                    this.alt = 'FAILED TO LOAD: ' + this.alt;
+                });
+                img.addEventListener('load', function() {
+                    this.style.border = '2px solid green';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

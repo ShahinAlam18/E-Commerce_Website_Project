@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin System Test - ShopX</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+        .warning { background-color: #fff3cd; color: #856404; border-color: #ffeaa7; }
+        .step { margin: 10px 0; padding: 10px; background: #f8f9fa; border-left: 4px solid #007bff; }
+        .code { background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin System Test Guide</h1>
+        
+        <div class="test-section info">
+            <h2>🎯 What We've Implemented</h2>
+            <ul>
+                <li><strong>Custom User Model:</strong> Added `is_admin` field to distinguish admin users</li>
+                <li><strong>Admin Registration:</strong> Special registration form with password verification (11814)</li>
+                <li><strong>Restricted Access:</strong> "Add Product" feature only available to admin users</li>
+                <li><strong>Navigation Updates:</strong> Admin features hidden from regular users</li>
+            </ul>
+        </div>
+        
+        <div class="test-section warning">
+            <h2>⚠️ Important Notes</h2>
+            <p>Due to Python 3.13 compatibility issues with Django 3.1.12, you may need to:</p>
+            <ul>
+                <li>Use Python 3.11 or 3.12 for running Django commands</li>
+                <li>Or upgrade Django to a newer version</li>
+                <li>The web interface should work fine when the server is running</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 Testing Steps</h2>
+            
+            <div class="step">
+                <h3>Step 1: Start the Server</h3>
+                <div class="code">cd /Users/macbookair/Desktop/PROJECT/projectx<br>python manage.py runserver</div>
+            </div>
+            
+            <div class="step">
+                <h3>Step 2: Test Regular User Registration</h3>
+                <ol>
+                    <li>Go to: <code>http://localhost:8000/accounts/register/</code></li>
+                    <li>Select "Regular User"</li>
+                    <li>Fill in the form and register</li>
+                    <li>Check that "Add Product" link is NOT visible in navigation</li>
+                </ol>
+            </div>
+            
+            <div class="step">
+                <h3>Step 3: Test Admin Registration</h3>
+                <ol>
+                    <li>Go to: <code>http://localhost:8000/accounts/register/</code></li>
+                    <li>Select "Admin"</li>
+                    <li>Enter admin password: <strong>11814</strong></li>
+                    <li>Fill in the form and register</li>
+                    <li>Check that "Add Product" link IS visible in navigation</li>
+                </ol>
+            </div>
+            
+            <div class="step">
+                <h3>Step 4: Test Product Creation</h3>
+                <ol>
+                    <li>Login as admin user</li>
+                    <li>Click "Add Product" in navigation</li>
+                    <li>Fill in product details and upload image</li>
+                    <li>Submit and verify product is created</li>
+                </ol>
+            </div>
+            
+            <div class="step">
+                <h3>Step 5: Test Access Control</h3>
+                <ol>
+                    <li>Login as regular user</li>
+                    <li>Try to access: <code>http://localhost:8000/products/add-product/</code></li>
+                    <li>Should be redirected with "Access denied" message</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="test-section success">
+            <h2>✅ Expected Results</h2>
+            <ul>
+                <li>Regular users cannot see "Add Product" link</li>
+                <li>Admin users can see "Add Product" link</li>
+                <li>Only admin users can access product creation form</li>
+                <li>Regular users get "Access denied" message when trying to add products</li>
+                <li>Admin password verification works (only 11814 is accepted)</li>
+            </ul>
+        </div>
+        
+        <div class="test-section error">
+            <h2>❌ Troubleshooting</h2>
+            <h3>If migrations fail:</h3>
+            <div class="code">
+                # Try with Python 3.11 or 3.12<br>
+                python3.11 manage.py makemigrations accounts<br>
+                python3.11 manage.py migrate
+            </div>
+            
+            <h3>If admin registration fails:</h3>
+            <ul>
+                <li>Check that admin password is exactly "11814"</li>
+                <li>Verify all form fields are filled</li>
+                <li>Check Django server logs for errors</li>
+            </ul>
+            
+            <h3>If "Add Product" doesn't appear:</h3>
+            <ul>
+                <li>Make sure you're logged in as admin</li>
+                <li>Check that user.is_admin is True in database</li>
+                <li>Clear browser cache and refresh</li>
+            </ul>
+        </div>
+        
+        <div class="test-section info">
+            <h2>📁 Files Modified</h2>
+            <ul>
+                <li><code>accounts/models.py</code> - Custom user model with is_admin field</li>
+                <li><code>accounts/forms.py</code> - Admin and user registration forms</li>
+                <li><code>accounts/views.py</code> - Updated registration logic</li>
+                <li><code>templates/accounts/register.html</code> - User type selection</li>
+                <li><code>products/views.py</code> - Admin-only access for add_product</li>
+                <li><code>templates/base.html</code> - Admin-only navigation</li>
+                <li><code>templates/products/add_product.html</code> - Admin indicator</li>
+                <li><code>projectx/settings.py</code> - Custom user model configuration</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
